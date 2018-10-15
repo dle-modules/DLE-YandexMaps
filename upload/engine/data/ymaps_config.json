@@ -2,8 +2,8 @@
   "moduleName": "ymaps",
   "moduleTitle": "Yandex Maps",
   "moduleDescr": "Модуль Яндекс.Карты для DLE",
-  "moduleVersion": "2.0.0",
-  "moduleDate": "09.05.2017",
+  "moduleVersion": "2.0.1",
+  "moduleDate": "16.10.2018",
   "dleVersion": "10.x",
   "main": {
     "moduleLang": "Russian",
