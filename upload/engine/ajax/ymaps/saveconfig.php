@@ -21,11 +21,13 @@ $cfg = json_decode(file_get_contents(ENGINE_DIR . '/data/ymaps_config.json'), tr
 
 define('MODULE_DIR', ENGINE_DIR . '/modules/' . $cfg['moduleName'] . '/');
 
-include ENGINE_DIR . '/data/config.php';
+include_once ENGINE_DIR . '/plugins/loader/loader.php';
 
-require_once ENGINE_DIR . '/classes/mysql.php';
-require_once ENGINE_DIR . '/data/dbconfig.php';
-require_once ENGINE_DIR . '/modules/functions.php';
+include (DLEPlugins::Check(ENGINE_DIR . '/data/config.php'));
+
+require_once (DLEPlugins::Check(ENGINE_DIR . '/classes/mysql.php'));
+require_once (DLEPlugins::Check(ENGINE_DIR . '/data/dbconfig.php'));
+require_once (DLEPlugins::Check(ENGINE_DIR . '/modules/functions.php'));
 if ($config['version_id'] > 9.6) {
 	dle_session();
 } else {

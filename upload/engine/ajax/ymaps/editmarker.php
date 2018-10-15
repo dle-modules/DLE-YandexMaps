@@ -22,18 +22,20 @@ $icons = json_decode(file_get_contents(ENGINE_DIR . '/data/ymaps_icons.json'), t
 
 define('MODULE_DIR', ENGINE_DIR . '/modules/' . $cfg['moduleName'] . '/');
 
+include_once ENGINE_DIR . '/plugins/loader/loader.php';
+
 if (@file_exists(MODULE_DIR . '/language/' . $cfg['main']['moduleLang'] . '.lng')) {
-	include(MODULE_DIR . '/language/' . $cfg['main']['moduleLang'] . '.lng');
+	include(DLEPlugins::Check(MODULE_DIR . '/language/' . $cfg['main']['moduleLang'] . '.lng'));
 } else {
 	die("Language file not found");
 }
 
 
-include ENGINE_DIR . '/data/config.php';
+include (DLEPlugins::Check(ENGINE_DIR . '/data/config.php'));
 
-require_once ENGINE_DIR . '/classes/mysql.php';
-require_once ENGINE_DIR . '/data/dbconfig.php';
-require_once ENGINE_DIR . '/modules/functions.php';
+require_once (DLEPlugins::Check(ENGINE_DIR . '/classes/mysql.php'));
+require_once (DLEPlugins::Check(ENGINE_DIR . '/data/dbconfig.php'));
+require_once (DLEPlugins::Check(ENGINE_DIR . '/modules/functions.php'));
 if ($config['version_id'] > 9.6) {
 	dle_session();
 } else {
