@@ -121,7 +121,6 @@ $module_lang = array (
     'could_not_save_local_key'            => '<span style="color:red;">Помилка</span>, не можливо записати новий локальний ключ.',
     'license_key_string_mismatch'         => '<span style="color:red;">Помилка</span>, локальний ключ не дійсний для зазначеної ліцензії.',
     'license_error'                       => '<span style="color: red;">Помилка ліцензії, зверніться до автора модуля.</span>',
-    'licenseStatus'                       => 'Статус ліцензії: ',
     'moduleActionReset'                   => 'Сбросить',
     
     // 1.4.3

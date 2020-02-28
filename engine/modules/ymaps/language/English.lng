@@ -121,7 +121,6 @@ $module_lang = array (
     'could_not_save_local_key'            => '<span style="color:red;">Error</span>, it is not possible to record a new local key.',
     'license_key_string_mismatch'         => '<span style="color:red;">Error</span>, the local key is not valid for the specified license.',
     'license_error'                       => '<span style="color: red;">License error, contact the author of the module.</span>',
-    'licenseStatus'                       => 'License status: ',
     'moduleActionReset'                   => 'Reset',
     
     // 1.4.3

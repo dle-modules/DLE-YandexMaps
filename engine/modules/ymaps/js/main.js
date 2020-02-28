@@ -200,22 +200,6 @@ doc
 		    thisVal = $this.val();
 		$('.selected-marker').css('background', thisVal);
 
-	})
-	.on('sheckLicenseStatus', function (event) {
-		var $licenseStatus = $('#licenseStatus');
-		$.ajax({
-			url: 'engine/ajax/ymaps/check_status.php'
-		})
-			.done(function (data) {
-				$licenseStatus.html(data);
-			})
-			.fail(function () {
-				console.log("error");
-			})
-			.always(function () {
-				console.log("complete");
-			});
-
 	});
 
 // pre-submit callback

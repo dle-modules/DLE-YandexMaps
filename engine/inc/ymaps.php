@@ -68,14 +68,9 @@ include(MODULE_DIR . 'admin/classes/xfields.php');
 	<div class="container">
 		<div class="content">
 			<div class="col col-mb-12 col-12">
-				<h1 class="ta-center"><?= $cfg->moduleTitle ?>
-					<small class="text-gray">
-						v.<?= $cfg->moduleVersion ?> <?= $module_lang['ot'] ?> <?= $cfg->moduleDate ?></small>
-					<span class="btn btn-small mfp-open-ajax"
-					      data-mfp-src="<?= $config['http_home_url'] ?>engine/ajax/<?= $cfg->moduleName ?>/check_updates.php?name=<?= $cfg->moduleName ?>&currentVersion=<?= $cfg->moduleVersion ?>"><?= $module_lang['moduleTextCheckUpdates'] ?></span>
+				<h1 class="ta-center">
+					<?= $cfg->moduleTitle ?>
 				</h1>
-				<div class="ta-center"><b><?= $module_lang['licenseStatus'] ?></b> <span id="licenseStatus"></span>
-				</div>
 				<hr>
 			</div> <!-- .col col-mb-12 col-12 -->
 		</div> <!-- .content -->
