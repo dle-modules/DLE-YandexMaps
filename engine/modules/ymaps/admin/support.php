@@ -7,7 +7,8 @@
  */
 
 if (!defined('DATALIFEENGINE')) {
-	die("Go fuck yourself!");
+	header("HTTP/1.1 403 Forbidden");
+	die("Hacking attempt!");
 }
 
 ?>
@@ -20,7 +21,7 @@ if (!defined('DATALIFEENGINE')) {
 		<h2 class="m0"><?= $module_lang['moduleTextHelp'] ?></h2>
 	</div>
 	<div class="col col-mb-12 mb10">
-		<?= $module_lang['moduleLongText1'] ?> <a href="http://maps.pafnuty.name/documentation/" target="_blank">http://maps.pafnuty.name/documentation/</a>.
+		<?= $module_lang['moduleLongText1'] ?> <a href="http://maps.pafnuty.name/documentation/" target="_blank">maps.pafnuty.name/documentation/</a>.
 
 		<hr>
 	</div>

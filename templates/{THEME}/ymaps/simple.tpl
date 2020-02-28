@@ -1,20 +1,20 @@
 {script_yandex}
 <script>
-	var lon = {lon},
-		lat = {lat},
-		zoom = {zoom},
-		controls = $.parseJSON('{controls}'),
-		placemarkStyle = $.parseJSON('{placemarkStyle}'),
-		balloonContentBodyText = '{title} <br> <p>{short_story limit="100"}</p>',
-		iconContentText = '{title limit="15"}',
-		hintContentText = '{title}'
+	var lon = {lon};
+	var	lat = {lat};
+	var	zoom = {zoom};
+	var	controls = JSON.parse('{controls}');
+	var	placemarkStyle = JSON.parse('{placemarkStyle}');
+	var	balloonContentBodyText = '{title} <br> <p>{short_story limit="100"}</p>';
+	var	iconContentText = '{title limit="15"}';
+	var	hintContentText = '{title}';
 
 	// Инициализация карты.
 	ymaps.ready(showMap);
 
 	function showMap() {
 
-		simpeDetailMap = new ymaps.Map('simpleMap-{id}', {
+		var simpeDetailMap = new ymaps.Map('simpleMap-{id}', {
 			center: [lat, lon],
 			zoom: zoom,
 			controls: controls
@@ -28,7 +28,7 @@
 		);
 
 		simpeDetailMap.geoObjects.add(placemark);
-	};
+	}
 
 </script>
 

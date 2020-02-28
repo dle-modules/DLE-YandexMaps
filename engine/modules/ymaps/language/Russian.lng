@@ -16,7 +16,7 @@ $module_lang = array (
     'mapSettings'                         => 'Настройки карты',
     'mapsSettings'                        => 'Настройки страницы с метками',
 
-    'moduleTextApiKey'                    => '<a href="https://developer.tech.yandex.ru/" target="_blank">API Key</a> Яндекс карт',
+    'moduleTextApiKey'                    => '<a href="https://developer.tech.yandex.ru/services/" target="_blank">API Key</a> Яндекс карт',
     'moduleTextApiKeyWhat'                => 'Для&nbsp;чего&nbsp;нужен&nbsp;ключ?',
     'moduleTextMapHeight'                 => 'Высота карты по умолчанию (px)',
     'moduleTextMapControls'               => 'Элементы управления картой',

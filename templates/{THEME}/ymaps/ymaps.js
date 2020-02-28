@@ -1,180 +1,240 @@
-/**!
+/* eslint-disable no-undef */
+/* eslint-env es5 */
+/** !
  * DLE-YandexMaps — Бесплатный модуль Яндекс Карт для DLE
  *
  * @author     ПафНутиЙ <pafnuty10@gmail.com>
  * @link       https://git.io/v9irg
  */
 
-var doc = $(document);
+/**
+ * @typedef {object} mapConfig
+ *
+ * @property {string} mapSelector
+ * @property {boolean} isInline
+ * @property {string} mapUrl
+ * @property {array} controls
+ * @property {number} height
+ * @property {object} defaultPos
+ * @property {string} defaultPos.lat
+ * @property {string} defaultPos.lon
+ * @property {string} defaultPos.zoom
+ * @property {object} arPlacemarkStyles
+ * @property {string} inputSelector
+ * @property {string} xfHolder
+ */
 
-doc
-	.on('change', '#category', function() {
-		hideCoordsField('.btn-addmap');
-	})
-	.on('click', '.add-map-save', function() {
-		applyCoords();
-	})
-	.on('click', '.add-map-clear', function() {
-		resetCoords();
-	});
+/**
+ * Функция, запускающая скрипт карты. вызывается из php файла
+ * @param {mapConfig} mapConfig
+ */
+// eslint-disable-next-line no-unused-vars
+var addNewsMapStart = function(mapConfig) {
+  var script = document.createElement('script');
+  script.src = mapConfig.mapUrl;
+  script.onload = function() {
+    ymapsStart(mapConfig);
+  };
+  document.getElementsByTagName('head')[0].appendChild(script);
+};
 
-	// Инициализация карты.
+/**
+ *
+ * @param {mapConfig} mapConfig
+ */
+var ymapsStart = function(mapConfig) {
+  var addnewsMap, myPlacemark;
+  var methods = {
+    toggleXFieldAndBtn: function() {
+      var $btn = $('.btn-addmap');
+      if ($(mapConfig.xfHolder).css('display') !== 'none') {
+        $(mapConfig.xfHolder).hide();
+        $btn.show();
+      } else {
+        $btn.hide();
+      }
+    },
 
-	ymaps.ready(addMapInit);
+    /**
+     *
+     * @returns {{lat: string, lon: string, zoom: string}|any | jQuery | null | undefined}
+     */
+    getCoordsFromInput: function() {
+      var pointInput = $(mapConfig.inputSelector);
+      if (pointInput.val()) {
+        return $.parseJSON(pointInput.val());
+      } else {
+        return mapConfig.defaultPos;
+      }
+    },
 
-	function addMapInit() {
-		var addnewsMap,
-			myPlacemark;
-		doc
-			.on('mapInit', function() {
-				var $map = $('#map'),
-					coors = getCorrsFromInput(),
-					lat = coors.lat,
-					lon = coors.lon,
-					zoom = coors.zoom;
-				
-				$map.height(height);
+    /**
+     *
+     * @param coords
+     * @param zoom
+     */
+    setCenter: function(coords, zoom) {
+      if (coords && coords.length && zoom) {
+        var inpText =
+          '{"lat":"' +
+          coords[0].toPrecision(6) +
+          '", "lon" : "' +
+          coords[1].toPrecision(6) +
+          '", "zoom": "' +
+          zoom +
+          '"}';
+        $(mapConfig.inputSelector).val(inpText);
+      }
+    },
 
-				if (addnewsMap) {
-					myPlacemark = false;
-					addnewsMap.events.remove(['click','boundschange','dragend']);
-					addnewsMap.destroy();
-				};
+    /**
+     *
+     * @returns {Array}
+     */
+    getDataFromInput: function() {
+      var returnValue = [];
+      var inputValue = $(mapConfig.inputSelector).val();
+      if (inputValue) {
+        var inputCoords = JSON.parse(inputValue);
+        returnValue = [inputCoords.lat * 1, inputCoords.lon * 1];
+      }
+      return returnValue;
+    },
 
-				addnewsMap = new ymaps.Map('map', {
-					center: [lat, lon], // Саратов
-					zoom: zoom,
-					controls: controls
-				});
-				console.log('getInput', getInput());
-				
-				if (getInput()) {
-					var _coords = $.parseJSON(getInput());
-					myPlacemark = createPlacemark([_coords.lat*1, _coords.lon*1]);
-					addnewsMap.geoObjects.add(myPlacemark);
-				};
+    resetCoords: function() {
+      $(mapConfig.inputSelector).val('');
+    },
 
-				// Слушаем клик на карте
-				addnewsMap.events
-					.add('click', function (e) {
-						var coords = e.get('coords');
-						// Если метка уже создана – просто передвигаем ее
-						if (myPlacemark) {
-							myPlacemark.geometry.setCoordinates(coords);
-							console.log('двигаем');
-						}
-						// Если нет – создаем.
-						else {
-							console.log('создаём');
-							myPlacemark = createPlacemark(coords);
-							addnewsMap.geoObjects.add(myPlacemark);
+    /**
+     *
+     * @param coords
+     * @returns {object} ymaps.Placemark
+     */
+    createPlacemark: function(coords) {
+      var $catList = $('[name="catlist[]"]');
+      var categoryId = 0;
+      if ($catList.length) {
+        categoryId = $catList.find('option:selected').val() || $catList.val();
+      }
+      var key = categoryId > 0 ? categoryId : 'default';
+      var placemarkStyle = mapConfig.arPlacemarkStyles;
 
-							// Слушаем событие окончания перетаскивания на метке.
-							myPlacemark.events.add('dragend', function () {
-								setCenter(myPlacemark.geometry.getCoordinates(), addnewsMap.getZoom());
-							});
-						}
-						setCenter(coords, addnewsMap.getZoom());
-					})
-					.add('boundschange', function (e) {
-						setCenter([lat*1, lon*1], addnewsMap.getZoom());
-					});
+      return new ymaps.Placemark(coords, {}, placemarkStyle[key]);
+    },
 
-				// Создание метки
-				function createPlacemark(coords) {
-					// переменная arPlacemarkStyles определена в модуле
-					var categoryId = ($('#category').length) ? $('#category option:selected').val() : 0,
-						key = (categoryId > 0) ? categoryId : 'default',
-						placemarkStyle = $.parseJSON(arPlacemarkStyles);
-					
-					console.log('categoryId: ',categoryId);
-					return new ymaps.Placemark(coords, {},
-						placemarkStyle[key]
-					);
-				}
-			});
-	};
+    /**
+     *
+     * @param res
+     */
+    addOrMovePlacemark: function(res) {
+      // Пробуем получить метку из геометрии переданной точки (если точка передана из поиска)
+      var coords = res.geometry && res.geometry.getCoordinates();
 
-jQuery(document).ready(function($) {
-	// Прячем поле с координатами.
-	// Сама функция живёт в /engine/modules/ymaps/addnews.php
-	// и генерируется автоматически в зависимости от поля.
-	hideCoordsField('.btn-addmap');
-	if ($.magnificPopup) {
-		// Дефолтные настройки magnificpopup
-		$.extend(true, $.magnificPopup.defaults, {
-			tClose: 'Закрыть (Esc)',
-			tLoading: 'Загрузка...'
-		});
+      // Или пробуем достать её из текущих координат (если это клик по карте)
+      if (!coords) {
+        coords = res.get('coords');
+      }
+      // Если метка уже создана – просто передвигаем ее
+      if (myPlacemark) {
+        myPlacemark.geometry.setCoordinates(coords);
+      } else {
+        // Если нет – создаем.
+        myPlacemark = methods.createPlacemark(coords);
+        addnewsMap.geoObjects.add(myPlacemark);
 
+        // Слушаем событие окончания перетаскивания на метке.
+        myPlacemark.events.add('dragend', function() {
+          methods.setCenter(myPlacemark.geometry.getCoordinates(), addnewsMap.getZoom());
+        });
+      }
+      methods.setCenter(myPlacemark.geometry.getCoordinates(), addnewsMap.getZoom());
+    }
+  };
+  var doc = $(document);
 
-		$('[data-mfp-src]').magnificPopup({
-			type: 'inline',
-			preloader: false,
-			// focus: '#username',
-			modal: true,
-			callbacks: {
-				open : function () {
-					doc.trigger('mapInit');
-				}
-			}
-		});
-	};
+  doc.on('change', '#category', methods.toggleXFieldAndBtn).on('click', '.add-map-clear', methods.resetCoords);
 
-	if ($('#map-inline').length) {
-		ymaps.ready(ymapInline);
-		function ymapInline() {
-			var addnewsMap,
-				myPlacemark,
-				$map = $('#map'),
-				coors = getCorrsFromInput(),
-				lat = coors.lat,
-				lon = coors.lon,
-				zoom = coors.zoom;
-				
-			$map.height(height);
+  // Инициализация карты.
+  ymaps.ready(addMapInit);
 
-			if (!addnewsMap) {
+  function addMapInit() {
+    // Скрываем поле с координатами карты, оно не нужно пользователю.
+    methods.toggleXFieldAndBtn();
+    // Убираем блокировку с кнопки открытия модального окна
+    $('.btn-addmap').prop('disabled', false);
 
-				addnewsMap = new ymaps.Map('map-inline', {
-					center: [lat, lon], // Саратов
-					zoom: zoom,
-					controls: controls
-				});
-			};
-			// Слушаем клик на карте
-			addnewsMap.events.add('click', function (e) {
-					var coords = e.get('coords');
+    doc.on('mapInit', function() {
+      var $map = $('#' + mapConfig.mapSelector);
+      var coors = methods.getCoordsFromInput();
+      var lat = coors.lat;
+      var lon = coors.lon;
+      var zoom = coors.zoom;
 
-					// Если метка уже создана – просто передвигаем ее
-					if (myPlacemark) {
-						myPlacemark.geometry.setCoordinates(coords);
-					}
-					// Если нет – создаем.
-					else {
-						myPlacemark = createPlacemark(coords);
+      // На всякий случай устанавливаем высоту карты
+      $map.height(mapConfig.height);
 
-						addnewsMap.geoObjects.add(myPlacemark);
-						// Слушаем событие окончания перетаскивания на метке.
-						myPlacemark.events.add('dragend', function () {
-							setCenter(myPlacemark.geometry.getCoordinates(), addnewsMap.getZoom());
-						});
-					}
-					setCenter(coords, addnewsMap.getZoom());
-				})
-				.add('boundschange', function (e) {
-					setCenter([lat * 1, lon * 1], addnewsMap.getZoom());
-				});
+      if (addnewsMap) {
+        myPlacemark = false;
+        addnewsMap.events.remove(['click', 'boundschange', 'dragend', 'resultselect', 'submit']);
+        addnewsMap.destroy();
+      }
 
-			// Создание метки
-			function createPlacemark(coords) {
-				return new ymaps.Placemark(coords, {
-					draggable: true
-				});
-			}
+      addnewsMap = new ymaps.Map(mapConfig.mapSelector, {
+        center: [lat, lon], // Саратов
+        zoom: zoom,
+        controls: mapConfig.controls
+      });
 
-			
-		}
-	}
+      var searchControl = addnewsMap.controls.get('searchControl');
 
-}); //ready
+      if (searchControl) {
+        searchControl.options.set('noPlacemark', true);
+        searchControl.events.add('resultselect', function(e) {
+          var index = e.get('index');
+          searchControl.getResult(index).then(methods.addOrMovePlacemark);
+        });
+      }
+
+      var dataFromInput = methods.getDataFromInput();
+
+      if (dataFromInput) {
+        myPlacemark = methods.createPlacemark(dataFromInput);
+        addnewsMap.geoObjects.add(myPlacemark);
+      }
+
+      // Слушаем клик на карте
+      addnewsMap.events.add('click', methods.addOrMovePlacemark).add('boundschange', function() {
+        var coords = [lat * 1, lon * 1];
+
+        if (myPlacemark) {
+          coords = myPlacemark.geometry.getCoordinates();
+        }
+        methods.setCenter(coords, addnewsMap.getZoom());
+      });
+    });
+
+    if (mapConfig.isInline) {
+      doc.trigger('mapInit');
+    }
+
+    if ($.magnificPopup) {
+      // Дефолтные настройки magnificpopup
+      $.extend(true, $.magnificPopup.defaults, {
+        tClose: 'Закрыть (Esc)',
+        tLoading: 'Загрузка...'
+      });
+
+      $('[data-mfp-src]').magnificPopup({
+        type: 'inline',
+        preloader: false,
+        // focus: '#username',
+        modal: true,
+        callbacks: {
+          open: function() {
+            doc.trigger('mapInit');
+          }
+        }
+      });
+    }
+  }
+};

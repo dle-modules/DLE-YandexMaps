@@ -22,8 +22,6 @@ $icons = json_decode(file_get_contents(ENGINE_DIR . '/data/ymaps_icons.json'), t
 
 define('MODULE_DIR', ENGINE_DIR . '/modules/' . $cfg['moduleName'] . '/');
 
-include_once ENGINE_DIR . '/plugins/loader/loader.php';
-
 if (@file_exists(MODULE_DIR . '/language/' . $cfg['main']['moduleLang'] . '.lng')) {
 	include(DLEPlugins::Check(MODULE_DIR . '/language/' . $cfg['main']['moduleLang'] . '.lng'));
 } else {

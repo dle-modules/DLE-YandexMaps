@@ -7,7 +7,8 @@
  */
 
 if (!defined('DATALIFEENGINE')) {
-	die("Go fuck yourself!");
+	header("HTTP/1.1 403 Forbidden");
+	die("Hacking attempt!");
 }
 
 $icons = json_decode(file_get_contents(ENGINE_DIR . '/data/ymaps_icons.json'), true);

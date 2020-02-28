@@ -7,7 +7,8 @@
  */
 
 if (!defined('DATALIFEENGINE')) {
-	die("Go fuck yourself!");
+	header("HTTP/1.1 403 Forbidden");
+	die("Hacking attempt!");
 }
 
 $fullscreenControl_checked = ($cfg->main->controls->fullscreenControl) ? 'checked' : '';
@@ -78,16 +79,16 @@ function getLangsList($dir = '../language') {
 					href="http://store.pafnuty.name/purchase/"
 					target="_blank"><?= $module_lang['moduleTextGetlicenceKey'] ?></a>
 		</div>
-	</div>
+	</div> */ ?>
 
 	<div class="content">
 		<div class="col col-mb-12 col-5 col-dt-4 form-label">
 			<?=$module_lang['moduleTextApiKey']?>
 		</div>
 		<div class="col col-mb-12 col-7 col-dt-8 form-control">
-			<input id="apiKey" class="input" name="apiKey" type="text" value="<?=$cfg->main->apiKey?>"> <a href="https://tech.yandex.ru/maps/commercial/" target="_blank"><?=$module_lang['moduleTextApiKeyWhat']?></a>
+			<input id="apiKey" class="input" name="apiKey" type="text" value="<?=$cfg->main->apiKey?>"> <a href="https://tech.yandex.ru/maps/commercial/doc/concepts/about-enterprise-docpage/" target="_blank"><?=$module_lang['moduleTextApiKeyWhat']?></a>
 		</div>
-	</div>*/ ?>
+	</div>
 
 	<div class="content">
 		<div class="col col-mb-12 col-5 col-dt-4 form-label">

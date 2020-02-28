@@ -6,7 +6,8 @@
  * @link       https://git.io/v9irg
  */
 if (!defined('DATALIFEENGINE')) {
-	die("Go fuck yourself!");
+	header("HTTP/1.1 403 Forbidden");
+	die("Hacking attempt!");
 }
 
 /**

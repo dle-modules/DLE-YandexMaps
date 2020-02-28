@@ -16,7 +16,7 @@ $module_lang = array (
     'mapSettings'                         => 'Map settings',
     'mapsSettings'                        => 'Customize the page with labels',
 
-    'moduleTextApiKey'                    => '<a href="https://developer.tech.yandex.ru/" target="_blank">API Key</a> Yandex maps',
+    'moduleTextApiKey'                    => '<a href="https://developer.tech.yandex.ru/services/" target="_blank">API Key</a> Yandex maps',
     'moduleTextApiKeyWhat'                => 'For&nbsp;what&nbsp;need&nbsp;key?',
     'moduleTextMapHeight'                 => 'The height of the default map (px)',
     'moduleTextMapControls'               => 'The map controls',

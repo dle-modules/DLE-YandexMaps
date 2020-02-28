@@ -21,18 +21,13 @@ $cfg = json_decode(file_get_contents(ENGINE_DIR . '/data/ymaps_config.json'), tr
 
 define('MODULE_DIR', ENGINE_DIR . '/modules/' . $cfg['moduleName'] . '/');
 
-include_once ENGINE_DIR . '/plugins/loader/loader.php';
-
 include (DLEPlugins::Check(ENGINE_DIR . '/data/config.php'));
 
 require_once (DLEPlugins::Check(ENGINE_DIR . '/classes/mysql.php'));
 require_once (DLEPlugins::Check(ENGINE_DIR . '/data/dbconfig.php'));
 require_once (DLEPlugins::Check(ENGINE_DIR . '/modules/functions.php'));
-if ($config['version_id'] > 9.6) {
-	dle_session();
-} else {
-	@session_start();
-}
+dle_session();
+
 
 $user_group = get_vars("usergroup");
 if (!$user_group) {
@@ -74,8 +69,6 @@ if ($member_id['user_group'] == '1') {
 		unset($_POST['mapsettings']);
 		$cfg['main'] = $_POST;
 	}
-	// echo "<pre class='dle-pre'>"; print_r($_POST); echo "</pre>";
-	// die ();
 
 	$jsn = json_encode($cfg);
 	file_put_contents(ENGINE_DIR . '/data/ymaps_config.json', $jsn);

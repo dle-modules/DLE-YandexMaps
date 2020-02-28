@@ -7,8 +7,10 @@
  */
 
 if (!defined('DATALIFEENGINE')) {
-	die("Go fuck yourself!");
+	header("HTTP/1.1 403 Forbidden");
+	die("Hacking attempt!");
 }
+global $onload_scripts, $js_array;
 
 $cfg = json_decode(file_get_contents(ENGINE_DIR . '/data/ymaps_config.json'));
 
@@ -17,73 +19,50 @@ define('MODULE_DIR', ENGINE_DIR . '/modules/' . $cfg->moduleName . '/');
 define('MODULE_DIR', ENGINE_DIR . '/modules/' . $cfg->moduleName . '/');
 
 if (@file_exists(MODULE_DIR . '/language/' . $cfg->main->moduleLang . '.lng')) {
-	include(MODULE_DIR . '/language/' . $cfg->main->moduleLang . '.lng');
+	include(DLEPlugins::Check(MODULE_DIR . '/language/' . $cfg->main->moduleLang . '.lng'));
 } else {
 	die("Language file not found");
 }
 
-$key = ($cfg->apiKey) ? '&key=' . $cfg->apiKey : '';
+$key = ($cfg->main->apiKey) ? '&apikey=' . $cfg->main->apiKey : '';
 
-$ymaps = '<script src="//api-maps.yandex.ru/2.1/?lang=ru_RU' . $key . '"></script>';
-$ymaps .= '<script src="/engine/modules/' . $cfg->moduleName . '/js/jquery.magnificpopup.min.js"></script>';
-$ymaps .= '<script src="/templates/' . $config['skin'] . '/' . $cfg->moduleName . '/' . $cfg->moduleName . '.js"></script>';
+$js_array[] = '/engine/modules/' . $cfg->moduleName . '/js/jquery.magnificpopup.min.js';
+$js_array[] = '/templates/' . $config['skin'] . '/' . $cfg->moduleName . '/' . $cfg->moduleName . '.js';
 
 $mapHeight = ($cfg->main->mapHeight) ? $cfg->main->mapHeight : '400';
 $controls = (array)$cfg->main->controls;
 $controls = array_keys($controls);
 $controls = json_encode($controls);
 $arPlacemarkStyles = ($cfg->pointSettings->catPoints) ? json_encode($cfg->pointSettings->catPoints) : '{}';
+$mapSelector = $cfg->moduleName . '-map-container';
 
-$ymaps .= <<<HTML
-<script>
-	var arPlacemarkStyles = '{$arPlacemarkStyles}',
-		inputSelector = '[name="xfield[{$cfg->main->coordsField}]"]',
-		controls = $.parseJSON('{$controls}'),
-		height = {$cfg->main->mapHeight},
-		coordsFieldText;
-
-	function hideCoordsField(but) {
-		if ($('#xfield_holder_{$cfg->main->coordsField}').css('display') != 'none') {
-			$('#xfield_holder_{$cfg->main->coordsField}').hide();
-			$(but).show();
-		} else {
-			$(but).hide();
-		}
+$onload_scripts[] = <<<HTML
+	var mapConfig = {
+		isInline: false,
+		mapSelector: '{$mapSelector}',
+		mapUrl: '//api-maps.yandex.ru/2.1/?lang=ru_RU{$key}',
+		controls: {$controls},
+		height: {$cfg->main->mapHeight},
+		defaultPos: {
+			lat: '{$cfg->main->mapCenter->latitude}',
+			lon: '{$cfg->main->mapCenter->longitude}',
+			zoom: '{$cfg->main->mapCenter->zoom}',
+		},
+		arPlacemarkStyles: {$arPlacemarkStyles},
+		inputSelector: '[name="xfield[{$cfg->main->coordsField}]"]',
+		xfHolder: '#xfield_holder_{$cfg->main->coordsField}'
 	}
+	if (addNewsMapStart) {
+		addNewsMapStart(mapConfig);
+	};
+HTML;
 
-	function getCorrsFromInput() {
-		var pointInput = $(inputSelector);
-		if (pointInput.val()) {
-			return $.parseJSON(pointInput.val());
-		} else {
-			return {"lat":"{$cfg->main->mapCenter->latitude}","lon":"{$cfg->main->mapCenter->longitude}","zoom":"{$cfg->main->mapCenter->zoom}"};
-		}
-	}
-
-	function setCenter(coords, zoom) {
-		var inpText = '{"lat":"'+coords[0].toPrecision(6)+'", "lon" : "'+coords[1].toPrecision(6)+'", "zoom": "'+zoom+'"}';
-		coordsFieldText = inpText;
-	}
-
-	function applyCoords() {
-		$(inputSelector).val(coordsFieldText);
-	}
-
-	function resetCoords() {
-		$(inputSelector).val('');
-	}
-
-	function getInput() {
-		return $(inputSelector).val();
-	}
-
-</script>
-
+$ymaps = <<<HTML
 <div class="mfp-hide">
 	<div id="addMap" class="modal-wrapper">
 		<span class="modal-close popup-modal-dismiss" title="{$module_lang['moduleActionClose']}">&times;</span>
 		<div class="modal-content">
-			<div id="map" class="map-wrapper" style="height: {$mapHeight}px;"></div>
+			<div id="{$mapSelector}" class="map-wrapper" style="height: {$mapHeight}px;"></div>
 		</div>
 		<div class="btn popup-modal-dismiss add-map-save">{$module_lang['moduleActionApply']}</div>
 		<div class="btn popup-modal-dismiss add-map-clear">{$module_lang['moduleActionReset']}</div>

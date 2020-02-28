@@ -5,61 +5,6 @@
  * @link       https://git.io/v9irg
  */
 
-/* ==========================================================================
-   Buttons */
-/* ========================================================================== */
-
-	.btn {
-		display: inline-block;
-		color: #ffffff;
-		margin-bottom: 0;
-		font-weight: normal;
-		text-align: center;
-		vertical-align: middle;
-		cursor: pointer;
-		background-image: none;
-		background: #4a9fc5;
-		border: 0;
-		text-decoration: none;
-		white-space: nowrap;
-		padding: 7px 15px 5px;
-		font-size: 14px;
-		line-height: 20px;
-		border-radius: 3px;
-		-webkit-user-select: none;
-		-moz-user-select: none;
-		-ms-user-select: none;
-		user-select: none;
-		-webkit-transition: all ease 0.3s;
-		-moz-transition: all ease 0.3s;
-		-o-transition: all ease 0.3s;
-		transition: all ease 0.3s;
-		-webkit-box-shadow: 0 2px 0 #3584a7;
-		-moz-box-shadow: 0 2px 0 #3584a7;
-		box-shadow: 0 2px 0 #3584a7;
-	}
-	.btn:focus {
-		outline: thin dotted #333;
-		outline: 5px auto -webkit-focus-ring-color;
-		outline-offset: -2px;
-	}
-	.btn:hover,
-	.btn:focus {
-		color: #ffffff;
-		background: #50bd98;
-		text-decoration: none;
-		-webkit-box-shadow: 0 2px 0 #3c9e7d;
-		-moz-box-shadow: 0 2px 0 #3c9e7d;
-		box-shadow: 0 2px 0 #3c9e7d;
-	}
-	.btn:active,
-	.btn.active {
-		outline: 0;
-		-webkit-box-shadow: 0 2px 0 #50bd98;
-		-moz-box-shadow: 0 2px 0 #50bd98;
-		box-shadow: 0 2px 0 #50bd98;
-	}
-
 
 /* ==========================================================================
    Magnific Popup CSS */

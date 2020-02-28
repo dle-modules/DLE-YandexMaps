@@ -7,7 +7,8 @@
  */
 
 if (!defined('DATALIFEENGINE')) {
-	die("Go fuck yourself!");
+	header("HTTP/1.1 403 Forbidden");
+	die("Hacking attempt!");
 }
 
 $cfg = json_decode(file_get_contents(ENGINE_DIR . '/data/ymaps_config.json'));
@@ -54,7 +55,7 @@ if (!$yMap) {
 	$queryFields = implode(', ', $arQueryFields);
 
 	// API-key
-	$key = ($cfg->main->apiKey) ? '&key=' . $cfg->main->apiKey : '';
+	$key = ($cfg->main->apiKey) ? '&apikey=' . $cfg->main->apiKey : '';
 
 
 	$mapHeight = ($cfg->main->mapHeight) ? $cfg->main->mapHeight : '400';
