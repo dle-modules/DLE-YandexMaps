@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="utf-8"?>
+<dleplugin>
+	<name>DLE-YandexMaps</name>
+	<description>Яндекс карты для DLE</description>
+	<icon>engine/skins/images/ymaps.png</icon>
+	<version>3.0.0</version>
+	<dleversion>13</dleversion>
+	<versioncompare>greater</versioncompare>
+	<upgradeurl>https://updates.pafnuty.name/check-ymaps.php</upgradeurl>
+	<filedelete>0</filedelete>
+	<needplugin></needplugin>
+	<mnotice>1</mnotice>
+	<mysqlinstall><![CDATA[]]></mysqlinstall>
+	<mysqlupgrade><![CDATA[]]></mysqlupgrade>
+	<mysqlenable><![CDATA[INSERT INTO `{prefix}_admin_sections` (`name`, `title`, `descr`, `icon`, `allow_groups`) VALUES ('ymaps', 'Yandex Maps', 'Модуль Яндекс.Карты для DLE', 'engine/skins/images/ymaps.png', '1');]]></mysqlenable>
+	<mysqldisable><![CDATA[DELETE from `{prefix}_admin_sections` WHERE name = 'ymaps';]]></mysqldisable>
+	<mysqldelete><![CDATA[DELETE from `{prefix}_admin_sections` WHERE name = 'ymaps';]]></mysqldelete>
+	<phpinstall><![CDATA[]]></phpinstall>
+	<phpupgrade><![CDATA[]]></phpupgrade>
+	<phpenable><![CDATA[]]></phpenable>
+	<phpdisable><![CDATA[]]></phpdisable>
+	<phpdelete><![CDATA[]]></phpdelete>
+	<notice><![CDATA[<a href="https://github.com/dle-modules/DLE-YandexMaps/releases/latest" target="_blank">Release notes</a>]]></notice>
+	<file name="engine/inc/addnews.php">
+		<operation action="after">
+			<searchcode><![CDATA[echoheader( "<i class=\"fa fa-file-text-o position-left\"></i><span class=\"text-semibold\">{$lang['header_n_title']}</span>", $lang['addnews'] );]]></searchcode>
+			<replacecode><![CDATA[echo '<link rel="stylesheet" href="engine/modules/ymaps/css/ymaps_editnews.css?v=3.0.0"><script src="engine/modules/ymaps/js/ymaps_editnews.js?v=3.0.0"></script><script>jQuery(document).ready(function($) {loadController();});</script>';]]></replacecode>
+		</operation>
+	</file>
+	<file name="engine/inc/editnews.php">
+		<operation action="before">
+			<searchcode><![CDATA[if ( !$user_group[$member_id['user_group']]['allow_html'] ) $config['allow_admin_wysiwyg'] = 0;]]></searchcode>
+			<replacecode><![CDATA[echo '<link rel="stylesheet" href="engine/modules/ymaps/css/ymaps_editnews.css?v=3.0.0"><script src="engine/modules/ymaps/js/ymaps_editnews.js?v=3.0.0"></script><script>jQuery(document).ready(function($) {loadController();});</script>';]]></replacecode>
+		</operation>
+	</file>
+</dleplugin>
