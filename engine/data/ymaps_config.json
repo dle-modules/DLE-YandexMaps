@@ -1,1 +1,20 @@
-{"main":{"apiKey":"df7667ca-6e4b-4402-bbf0-339991016702","mapHeight":"450","controls":{"fullscreenControl":"1","searchControl":"1","typeSelector":"1","zoomControl":"1"},"mapCenter":{"latitude":"25.0213","longitude":"54.9849","zoom":"13"},"coordsField":"coords"},"pointSettings":{"catPoints":{"default":{"iconLayout":"default#image","iconImageHref":"http:\/\/yandexmaps.loc\/templates\/Default\/ymaps\/icons\/blue2.png","iconImageSize":["30","48"],"iconImageOffset":["-15","-24"]}}}}
+{
+  "main": {
+    "apiKey": "",
+    "mapHeight": "450",
+    "controls": {
+      "fullscreenControl": "1",
+      "searchControl": "1",
+      "typeSelector": "1",
+      "zoomControl": "1"
+    },
+    "mapCenter": {
+      "latitude": "25.0213",
+      "longitude": "54.9849",
+      "zoom": "13"
+    },
+    "coordsField": ""
+  },
+  "pointSettings": {
+  }
+}
