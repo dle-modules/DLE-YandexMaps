@@ -1,4 +1,11 @@
-Этот файл следует подключать
+{*
+  Этот файл следует подключать в другие шаблоны вот так:
+
+  include file="ymaps/all_placemarks.tpl"
+
+*}
+
+
 {* При необходимости переместить стили в CSS файл *}
 <style>
   #allPlacemarks.loading {
@@ -46,7 +53,7 @@
       url: dle_root + 'engine/ajax/controller.php',
       dataType: 'json',
       data: {
-        mod: 'ymaps_cat',
+        mod: 'ymaps_all',
         // вместо allplacemarks можно прописать имя другого шаблона, содержащего в себе конфигурацию для вывода меток
         // сам шаблон с конфигом находится в папке ymaps/all
         preset: 'allplacemarks'
