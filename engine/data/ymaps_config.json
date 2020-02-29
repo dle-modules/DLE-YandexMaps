@@ -1,10 +1,5 @@
 {
-  "moduleName": "ymaps",
-  "moduleTitle": "Yandex Maps",
-  "moduleDescr": "Модуль Яндекс.Карты для DLE",
   "main": {
-    "moduleLang": "Russian",
-    "licenceKey": "",
     "apiKey": "",
     "mapHeight": "450",
     "controls": {
@@ -21,6 +16,6 @@
     "coordsField": ""
   },
   "pointSettings": {
-    
+
   }
 }

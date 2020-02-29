@@ -237,7 +237,6 @@
 /engine/classes/tinify/
 
 # YandexMaps
-!/engine/ajax/ymaps/
 !/engine/skins/images/ymaps.png
 !/CHANGELOG.md
 !/engine/data/ymaps_icons.json

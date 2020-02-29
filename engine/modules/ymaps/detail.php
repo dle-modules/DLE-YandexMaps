@@ -13,10 +13,10 @@ if (!defined('DATALIFEENGINE')) {
 
 $cfg = json_decode(file_get_contents(ENGINE_DIR . '/data/ymaps_config.json'));
 
-define('MODULE_DIR', ENGINE_DIR . '/modules/' . $cfg->moduleName . '/');
+define('MODULE_DIR', ENGINE_DIR . '/modules/ymaps/');
 
-if (@file_exists(MODULE_DIR . '/language/' . $cfg->main->moduleLang . '.lng')) {
-	include(MODULE_DIR . '/language/' . $cfg->main->moduleLang . '.lng');
+if (@file_exists(MODULE_DIR . '/language/Russian.lng')) {
+	include(MODULE_DIR . '/language/Russian.lng');
 } else {
 	die("Language file not found");
 }
@@ -25,7 +25,7 @@ if (@file_exists(MODULE_DIR . '/language/' . $cfg->main->moduleLang . '.lng')) {
 $existFields = ['title', 'short_story', 'full_story'];
 
 // Конфиг модуля
-$yMapCfg = ['cachePrefix' => !empty($arConf['cachePrefix']) ? $arConf['cachePrefix'] : 'full_' . (int)$_REQUEST['newsid'] . '_ym', 'id' => (!empty($id)) ? (int)$id : false, 'template' => !empty($template) ? $template : $cfg->moduleName . '/default', 'fields' => $fields];
+$yMapCfg = ['cachePrefix' => !empty($arConf['cachePrefix']) ? $arConf['cachePrefix'] : 'full_' . (int)$_REQUEST['newsid'] . '_ym', 'id' => (!empty($id)) ? (int)$id : false, 'template' => !empty($template) ? $template : 'ymaps/default', 'fields' => $fields];
 $cacheName = md5(implode('_', $yMapCfg)) . $config['skin'];
 $yMap = false;
 $yMap = dle_cache($yMapCfg['cachePrefix'], $cacheName . $config['skin'], true);
@@ -142,9 +142,9 @@ if (!$yMap) {
 			die('empty news id');
 		}
 
-		$script_yandex = '<script src="//api-maps.yandex.ru/2.1/?lang=ru_RU' . $key . '"></script>';
-		$script_popup = '<script src="/engine/modules/' . $cfg->moduleName . '/js/jquery.magnificpopup.min.js"></script>';
-		$script_module = '<script src="/templates/' . $config['skin'] . '/' . $cfg->moduleName . '/' . $cfg->moduleName . '_public.js"></script>';
+		$script_yandex = '<script src="https://api-maps.yandex.ru/2.1/?lang=ru_RU' . $key . '"></script>';
+		$script_popup = '<script src="/engine/modules/ymaps/js/jquery.magnificpopup.min.js"></script>';
+		$script_module = '<script src="/templates/' . $config['skin'] . '/ymaps/ymaps_public.js"></script>';
 
 		$tpl->set('{key}', $key);
 

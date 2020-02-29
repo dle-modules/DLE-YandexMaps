@@ -50,11 +50,11 @@ function getCatPointSettings($id) {
 	$arPoint = (array)$cfg->pointSettings->catPoints->$id;
 	$imgName = str_replace(['islands#', 'StretchyIcon'], ['', 'Str'], $arPoint['preset']);
 	if (array_key_exists('iconColor', $arPoint)) {
-		$strPoint[] = '<p class="img-point"><img style="background: ' . $arPoint['iconColor'] . '" src="/engine/modules/' . $cfg->moduleName . '/images/' . $imgName . '.png" alt=""></p>';
+		$strPoint[] = '<p class="img-point"><img style="background: ' . $arPoint['iconColor'] . '" src="/engine/modules/ymaps/images/' . $imgName . '.png" alt=""></p>';
 	} elseif (array_key_exists('iconLayout', $arPoint)) {
 		$strPoint[] = '<p class="img-point"><img src="' . $arPoint['iconImageHref'] . '" alt=""></p>';
 	} else {
-		$strPoint[] = '<p class="img-point"><img src="engine/modules/' . $cfg->moduleName . '/images/' . $imgName . '.png" alt=""></p>';
+		$strPoint[] = '<p class="img-point"><img src="engine/modules/ymaps/images/' . $imgName . '.png" alt=""></p>';
 	}
 
 	if (count($arPoint) > 0) {

@@ -7,47 +7,43 @@
  */
 
 if (!defined('DATALIFEENGINE') OR !defined('LOGGED_IN')) {
-	die("Hacking attempt!");
+    die("Hacking attempt!");
 }
 if ($member_id['user_group'] != '1') {
-	msg("error", $lang['index_denied'], $lang['index_denied']);
+    msg("error", $lang['index_denied'], $lang['index_denied']);
 }
 
 /**
  * Конфиг модуля
  */
+$cfg = json_decode(file_get_contents(ENGINE_DIR.'/data/ymaps_config.json'));
 
-$cfg = json_decode(file_get_contents(ENGINE_DIR . '/data/ymaps_config.json'));
+define('MODULE_DIR', ENGINE_DIR.'/modules/ymaps');
 
-define('MODULE_DIR', ENGINE_DIR . '/modules/' . $cfg->moduleName . '/');
+include_once(DLEPlugins::Check(MODULE_DIR.'/language/Russian.lng'));
 
-if (@file_exists(MODULE_DIR . '/language/' . $cfg->main->moduleLang . '.lng')) {
-	include(MODULE_DIR . '/language/' . $cfg->main->moduleLang . '.lng');
-} else {
-	die("Language file not found");
-}
-
-include(MODULE_DIR . 'admin/classes/xfields.php');
+$key = ($cfg->main->apiKey) ? '&apikey=' . $cfg->main->apiKey : '';
 
 ?>
 <!DOCTYPE html>
 <html>
 <head>
 	<meta charset="<?= $config['charset'] ?>">
-	<title><?= $cfg->moduleTitle ?> - <?= $module_lang['moduleTextManagment'] ?></title>
-	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+	<title><?= $module_lang['moduleTitle'] ?> - <?= $module_lang['moduleTextManagment'] ?></title>
 	<meta name="viewport" content="width=device-width, initial-scale=1">
 
-	<link rel="stylesheet" href="<?= $config['http_home_url'] ?>engine/modules/<?= $cfg->moduleName ?>/css/style.css">
-	<script src="//api-maps.yandex.ru/2.1/?lang=ru_RU"></script>
-	<script src="//ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"></script>
-	<script src="//cdnjs.cloudflare.com/ajax/libs/autosize.js/1.18.1/jquery.autosize.min.js"></script>
-	<script src="<?= $config['http_home_url'] ?>engine/modules/<?= $cfg->moduleName ?>/js/jquery.form.min.js"></script>
-	<script src="<?= $config['http_home_url'] ?>engine/modules/<?= $cfg->moduleName ?>/js/jquery.ladda.min.js"></script>
-	<script src="<?= $config['http_home_url'] ?>engine/modules/<?= $cfg->moduleName ?>/js/jquery.magnificpopup.min.js"></script>
-	<script src="<?= $config['http_home_url'] ?>engine/modules/<?= $cfg->moduleName ?>/js/jquery.formstyler.min.js"></script>
-	<script src="<?= $config['http_home_url'] ?>engine/modules/<?= $cfg->moduleName ?>/js/jquery.easyResponsiveTabs.min.js"></script>
-	<script src="<?= $config['http_home_url'] ?>engine/modules/<?= $cfg->moduleName ?>/js/main.js"></script>
+	<link rel="stylesheet" href="<?= $config['http_home_url'] ?>engine/modules/ymaps/css/style.css">
+
+	<script src="https://api-maps.yandex.ru/2.1/?lang=ru_RU<?= $key ?>"></script>
+
+	<script src="<?= $config['http_home_url'] ?>engine/modules/ymaps/js/jquery-3.4.1.min.js"></script>
+	<script src="<?= $config['http_home_url'] ?>engine/modules/ymaps/js/jquery.autosize.min.js"></script>
+	<script src="<?= $config['http_home_url'] ?>engine/modules/ymaps/js/jquery.form.min.js"></script>
+	<script src="<?= $config['http_home_url'] ?>engine/modules/ymaps/js/jquery.ladda.min.js"></script>
+	<script src="<?= $config['http_home_url'] ?>engine/modules/ymaps/js/jquery.magnificpopup.min.js"></script>
+	<script src="<?= $config['http_home_url'] ?>engine/modules/ymaps/js/jquery.formstyler.min.js"></script>
+	<script src="<?= $config['http_home_url'] ?>engine/modules/ymaps/js/jquery.easyResponsiveTabs.min.js"></script>
+	<script src="<?= $config['http_home_url'] ?>engine/modules/ymaps/js/main.js"></script>
 </head>
 <body>
 	<div class="container container-blue">
@@ -60,7 +56,8 @@ include(MODULE_DIR . 'admin/classes/xfields.php');
 				   class="btn btn-small btn-white"><?= $lang['skin_view'] ?></a>
 			</div>
 			<div class="col col-mb-12 col-6 ta-right">
-				<?= $member_id['name'] . ' <small class="hide-phone">(' . $user_group[$member_id['user_group']]['group_name'] . ')</small> ' ?>
+                <?= $member_id['name'].' <small class="hide-phone">('
+                .$user_group[$member_id['user_group']]['group_name'].')</small> ' ?>
 				<a href="<?= $PHP_SELF ?>?action=logout" class="btn btn-small btn-red"><?= $lang['skin_logout'] ?></a>
 			</div>
 		</header>
@@ -69,7 +66,7 @@ include(MODULE_DIR . 'admin/classes/xfields.php');
 		<div class="content">
 			<div class="col col-mb-12 col-12">
 				<h1 class="ta-center">
-					<?= $cfg->moduleTitle ?>
+                    <?= $module_lang['moduleTitle'] ?>
 				</h1>
 				<hr>
 			</div> <!-- .col col-mb-12 col-12 -->
@@ -85,13 +82,13 @@ include(MODULE_DIR . 'admin/classes/xfields.php');
 
 					<div class="resp-tabs-container">
 						<div>
-							<? include(MODULE_DIR . 'admin/mapsettings.php'); ?>
+                            <? include(DLEPlugins::Check(MODULE_DIR.'/admin/mapsettings.php')); ?>
 						</div>
 						<div>
-							<? include(MODULE_DIR . 'admin/pointersettings.php'); ?>
+                            <? include(DLEPlugins::Check(MODULE_DIR.'/admin/pointersettings.php')); ?>
 						</div>
 						<div>
-							<? include(MODULE_DIR . 'admin/support.php'); ?>
+                            <? include(DLEPlugins::Check(MODULE_DIR.'/admin/support.php')); ?>
 						</div>
 					</div>
 				</div>
@@ -103,9 +100,10 @@ include(MODULE_DIR . 'admin/classes/xfields.php');
 		<div class="content">
 			<div class="col col-mb-12">
 				<hr class="mt0">
-				<?= $module_lang['contactsForSupport'] ?><br>
+                <?= $module_lang['contactsForSupport'] ?><br>
 				<a href="https://github.com/dle-modules/DLE-YandexMaps" target="_blank">DLE-YandexMaps</a> <br>
-				<a href="https://github.com/dle-modules/DLE-YandexMaps/issues/new" target="_blank"><?= $module_lang['moduleTextSupportСond'] ?></a><br>
+				<a href="https://github.com/dle-modules/DLE-YandexMaps/issues/new"
+				   target="_blank"><?= $module_lang['moduleTextSupportСond'] ?></a><br>
 			</div>
 		</div>
 	</div>

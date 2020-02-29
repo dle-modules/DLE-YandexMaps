@@ -14,32 +14,32 @@ global $onload_scripts, $js_array;
 
 $cfg = json_decode(file_get_contents(ENGINE_DIR . '/data/ymaps_config.json'));
 
-define('MODULE_DIR', ENGINE_DIR . '/modules/' . $cfg->moduleName . '/');
+define('MODULE_DIR', ENGINE_DIR . '/modules/ymaps/');
 
-define('MODULE_DIR', ENGINE_DIR . '/modules/' . $cfg->moduleName . '/');
+define('MODULE_DIR', ENGINE_DIR . '/modules/ymaps/');
 
-if (@file_exists(MODULE_DIR . '/language/' . $cfg->main->moduleLang . '.lng')) {
-	include(DLEPlugins::Check(MODULE_DIR . '/language/' . $cfg->main->moduleLang . '.lng'));
+if (@file_exists(MODULE_DIR . '/language/Russian.lng')) {
+	include(DLEPlugins::Check(MODULE_DIR . '/language/Russian.lng'));
 } else {
 	die("Language file not found");
 }
 
 $key = ($cfg->main->apiKey) ? '&apikey=' . $cfg->main->apiKey : '';
 
-$js_array[] = '/templates/' . $config['skin'] . '/' . $cfg->moduleName . '/' . $cfg->moduleName . '.js';
+$js_array[] = '/templates/' . $config['skin'] . '/ymaps/ymaps.js';
 
 $mapHeight = ($cfg->main->mapHeight) ? $cfg->main->mapHeight : '400';
 $controls  = (array)$cfg->main->controls;
 $controls  = array_keys($controls);
 $controls  = json_encode($controls);
 $arPlacemarkStyles = ($cfg->pointSettings->catPoints) ? json_encode($cfg->pointSettings->catPoints) : '{}';
-$mapSelector = $cfg->moduleName . '-map-container';
+$mapSelector = 'ymaps-map-container';
 
 $onload_scripts[] = <<<HTML
 	var mapConfig = {
 		isInline: true,
 		mapSelector: '{$mapSelector}',
-		mapUrl: '//api-maps.yandex.ru/2.1/?lang=ru_RU{$key}',
+		mapUrl: 'https://api-maps.yandex.ru/2.1/?lang=ru_RU{$key}',
 		controls: {$controls},
 		height: {$cfg->main->mapHeight},
 		coordsFieldText:'',

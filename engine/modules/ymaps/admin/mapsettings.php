@@ -19,24 +19,6 @@ $searchControl_checked = ($cfg->main->controls->searchControl) ? 'checked' : '';
 $trafficControl_checked = ($cfg->main->controls->trafficControl) ? 'checked' : '';
 $typeSelector_checked = ($cfg->main->controls->typeSelector) ? 'checked' : '';
 $zoomControl_checked = ($cfg->main->controls->zoomControl) ? 'checked' : '';
-/**
- * [getLangsList description]
- *
- * @param  string $dir [description]
- *
- * @return [type]      [description]
- */
-function getLangsList($dir = '../language') {
-	$f = scandir($dir);
-	foreach ($f as $file) {
-		if (preg_match('/\.(lng)/', $file)) {
-			$arr[] = str_replace('.lng', '', $file);
-		}
-	}
-
-	return $arr;
-}
-
 ?>
 
 <div class="content">
@@ -47,46 +29,18 @@ function getLangsList($dir = '../language') {
 		<h2 class="m0"><?= $module_lang['mapSettings'] ?></h2>
 	</div>
 </div>
-<form id="settingsForm" method="POST" action="/engine/ajax/<?= $cfg->moduleName ?>/saveconfig.php">
+<form id="settingsForm" method="POST" action="/engine/ajax/controller.php?mod=ymaps_saveconfig">
 	<input type="hidden" name="mapsettings" value="y">
-	<div class="content">
-		<div class="col col-mb-12 col-5 col-dt-4 form-label">
-			&nbsp;
-		</div>
-	</div>
-
-
-	<div class="content">
-		<div class="col col-mb-12 col-5 col-dt-4 form-label">
-			<?= $module_lang['moduleLangName'] ?>
-		</div>
-		<div class="col col-mb-12 col-7 col-dt-8 form-control">
-			<select name="moduleLang" id="moduleLang" class="styler">
-				<? foreach (getLangsList(ENGINE_DIR . '/modules/' . $cfg->moduleName . '/language') as $lang): ?>
-					<? $selectedLang = ($lang == $cfg->main->moduleLang) ? 'selected' : ''; ?>
-					<option value="<?= $lang; ?>" <?= $selectedLang ?>><?= $lang; ?></option>
-				<? endforeach; ?>
-			</select>
-		</div>
-	</div>
-
-	<? /*<div class="content">
-		<div class="col col-mb-12 col-5 col-dt-4 form-label">
-			<?= $module_lang['moduleTextLicenceKey'] ?>
-		</div>
-		<div class="col col-mb-12 col-7 col-dt-8 form-control">
-			<input id="licenceKey" class="input" name="licenceKey" type="text" value="<?= $cfg->main->licenceKey ?>"> <a
-					href="http://store.pafnuty.name/purchase/"
-					target="_blank"><?= $module_lang['moduleTextGetlicenceKey'] ?></a>
-		</div>
-	</div> */ ?>
-
 	<div class="content">
 		<div class="col col-mb-12 col-5 col-dt-4 form-label">
 			<?=$module_lang['moduleTextApiKey']?>
 		</div>
 		<div class="col col-mb-12 col-7 col-dt-8 form-control">
-			<input id="apiKey" class="input" name="apiKey" type="text" value="<?=$cfg->main->apiKey?>"> <a href="https://tech.yandex.ru/maps/commercial/doc/concepts/about-enterprise-docpage/" target="_blank"><?=$module_lang['moduleTextApiKeyWhat']?></a>
+			<input id="apiKey" class="input" name="apiKey" type="text" value="<?=$cfg->main->apiKey?>"> <br>
+			<small>
+				<?=$module_lang['moduleTextForWhatApiKey']?>
+			</small>
+			<a href="https://tech.yandex.ru/maps/jsapi/doc/2.1/terms/index-docpage/#index__conditions" target="_blank"><?=$module_lang['moduleTextApiKeyWhat']?></a>
 		</div>
 	</div>
 
@@ -180,23 +134,11 @@ function getLangsList($dir = '../language') {
 			       value="<?= $cfg->main->coordsField ?>"
 			       placeholder="<?= $module_lang['moduleTextMapZoomXfPlaceholderText'] ?>"> <span
 					class="btn btn-small mfp-open-ajax-xf disabled"
-					data-mfp-src="/engine/ajax/<?= $cfg->moduleName ?>/xfields.php" data-id="coordsField"
+					data-mfp-src="/engine/ajax/controller.php?mod=ymaps_xfields" data-id="coordsField"
 					data-description="<?= $module_lang['moduleTextMapZoomXfPlaceholder'] ?>"
 					data-field-type="text"><?= $module_lang['moduleActionCreateXf'] ?></span>
 		</div>
 	</div>
-
-	<? /*
-		<div class="content">
-			<div class="col col-mb-12 col-5 col-dt-4 form-label">
-				<?=$module_lang['moduleTextMapBaloonXf']?>
-			</div>
-			<div class="col col-mb-12 col-7 col-dt-8 form-control">
-				<input type="text" name="baloonField" id="baloonField" class="input xf-input" value="<?=$cfg->main->baloonField?>" placeholder="<?=$module_lang['moduleTextMapBaloonXfPlaceholderText']?>"> <span class="btn btn-small mfp-open-ajax-xf disabled" data-mfp-src="/engine/ajax/<?=$cfg->moduleName?>/xfields.php" data-id="baloonField" data-description="<?=$module_lang['moduleTextMapBaloonXfPlaceholder']?>" data-field-type="textarea"><?=$module_lang['moduleActionCreateXf']?></span>
-			</div>
-		</div>
-	*/ ?>
-
 
 	<div class="content">
 		<div class="col col-mb-12 col-5 col-dt-4 form-label">
