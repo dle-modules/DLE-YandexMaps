@@ -6,78 +6,23 @@
  * @link       https://git.io/v9irg
  */
 
-// Всякие обязательные штуки для ajax DLE
-@error_reporting(E_ALL ^ E_WARNING ^ E_NOTICE);
-@ini_set('display_errors', true);
-@ini_set('html_errors', false);
-@ini_set('error_reporting', E_ALL ^ E_WARNING ^ E_NOTICE);
+if (!defined('DATALIFEENGINE')) {
+    header("HTTP/1.1 403 Forbidden");
+    header('Location: ../../');
+    die("Hacking attempt!");
+}
 
-define('DATALIFEENGINE', true);
-define('ROOT_DIR', substr(dirname(__FILE__), 0, -18));
-
-define('ENGINE_DIR', ROOT_DIR . '/engine');
 
 $cfg = json_decode(file_get_contents(ENGINE_DIR . '/data/ymaps_config.json'), true);
-$icons = json_decode(file_get_contents(ENGINE_DIR . '/data/ymaps_icons.json'), true);
 
-define('MODULE_DIR', ENGINE_DIR . '/modules/' . $cfg['moduleName'] . '/');
+include(DLEPlugins::Check(ENGINE_DIR . '/modules/ymaps/language/Russian.lng'));
 
-
-if (@file_exists(MODULE_DIR . '/language/' . $cfg['main']['moduleLang'] . '.lng')) {
-	include(DLEPlugins::Check(MODULE_DIR . '/language/' . $cfg['main']['moduleLang'] . '.lng'));
-} else {
-	die("Language file not found");
-}
-
-
-include (DLEPlugins::Check(ENGINE_DIR . '/data/config.php'));
-
-require_once (DLEPlugins::Check(ENGINE_DIR . '/classes/mysql.php'));
-require_once (DLEPlugins::Check(ENGINE_DIR . '/data/dbconfig.php'));
-require_once (DLEPlugins::Check(ENGINE_DIR . '/modules/functions.php'));
-if ($config['version_id'] > 9.6) {
-	dle_session();
-} else {
-	@session_start();
-}
-
-
-$user_group = get_vars("usergroup");
-if (!$user_group) {
-	$user_group = [];
-	$db->query("SELECT * FROM " . USERPREFIX . "_usergroups ORDER BY id ASC");
-	while ($row = $db->get_row()) {
-		$user_group[$row['id']] = [];
-		foreach ($row as $key => $value) $user_group[$row['id']][$key] = stripslashes($value);
-	}
-	set_vars("usergroup", $user_group);
-	$db->free();
-}
-
-$cat_info = get_vars("category");
-
-if (!is_array($cat_info)) {
-	$cat_info = [];
-
-	$db->query("SELECT * FROM " . PREFIX . "_category ORDER BY posi ASC");
-	while ($row = $db->get_row()) {
-
-		$cat_info[$row['id']] = [];
-
-		foreach ($row as $key => $value) {
-			$cat_info[$row['id']][$key] = stripslashes($value);
-		}
-
-	}
-	set_vars("category", $cat_info);
-	$db->free();
-}
 $template_dir = ROOT_DIR . '/templates/' . $config['skin'];
 
 // Пытаемся получить даные из шаблона с настройками
-if ($_REQUEST['preset'] && file_exists($template_dir . '/' . $cfg['moduleName'] . '/all/' . $_REQUEST['preset'] . '.tpl')) {
+if ($_REQUEST['preset'] && file_exists($template_dir . '/ymaps/all/' . (string)$_REQUEST['preset'] . '.tpl')) {
 	// Если файл существует - берём из него контент с настройками
-	$preset = file_get_contents($template_dir . '/' . $cfg['moduleName'] . '/all/' . $_REQUEST['preset'] . '.tpl');
+	$preset = file_get_contents($template_dir . '/ymaps/all/' . (string)$_REQUEST['preset'] . '.tpl');
 	$arConf = [];
 } else {
 	die('error');
@@ -94,7 +39,8 @@ foreach ($preset as $v) {
 }
 
 // Конфиг модуля
-$yMapCfg = [// 'template' => !empty($template) ? $template : $cfg['moduleName'] . '/all/default',
+$yMapCfg = [//
+    'template' => !empty($template) ? $template : $cfg['moduleName'] . '/all/default',
 	'cachePrefix' => !empty($arConf['cachePrefix']) ? $arConf['cachePrefix'] : 'news_ym_all', 'startFrom' => !empty($arConf['startFrom']) ? (int)$arConf['startFrom'] : '0', // C какой новости начать вывод
 	'limit'       => !empty($arConf['limit']) ? (int)$arConf['limit'] : '1000', // Максимальное количество выводимых точек
 	'postId'      => !empty($arConf['postId']) ? $arConf['postId'] : '', // ID новостей для вывода в массиве (через запятую, или черточку)

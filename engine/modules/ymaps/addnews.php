@@ -7,34 +7,26 @@
  */
 
 if (!defined('DATALIFEENGINE')) {
-	header("HTTP/1.1 403 Forbidden");
-	die("Hacking attempt!");
+    header("HTTP/1.1 403 Forbidden");
+    die("Hacking attempt!");
 }
 global $onload_scripts, $js_array;
 
-$cfg = json_decode(file_get_contents(ENGINE_DIR . '/data/ymaps_config.json'));
+$cfg = json_decode(file_get_contents(ENGINE_DIR.'/data/ymaps_config.json'));
 
-define('MODULE_DIR', ENGINE_DIR . '/modules/ymaps/');
+include(DLEPlugins::Check(ENGINE_DIR.'/modules/ymaps/language/Russian.lng'));
 
-define('MODULE_DIR', ENGINE_DIR . '/modules/ymaps/');
+$key = ($cfg->main->apiKey) ? '&apikey='.$cfg->main->apiKey : '';
 
-if (@file_exists(MODULE_DIR . '/language/Russian.lng')) {
-	include(DLEPlugins::Check(MODULE_DIR . '/language/Russian.lng'));
-} else {
-	die("Language file not found");
-}
+$js_array[] = 'engine/modules/ymaps/js/jquery.magnificpopup.min.js';
+$js_array[] = 'templates/'.$config['skin'].'/ymaps/ymaps.js';
 
-$key = ($cfg->main->apiKey) ? '&apikey=' . $cfg->main->apiKey : '';
-
-$js_array[] = '/engine/modules/ymaps/js/jquery.magnificpopup.min.js';
-$js_array[] = '/templates/' . $config['skin'] . '/ymaps/ymaps.js';
-
-$mapHeight = ($cfg->main->mapHeight) ? $cfg->main->mapHeight : '400';
-$controls = (array)$cfg->main->controls;
-$controls = array_keys($controls);
-$controls = json_encode($controls);
+$mapHeight         = ($cfg->main->mapHeight) ? $cfg->main->mapHeight : '400';
+$controls          = (array)$cfg->main->controls;
+$controls          = array_keys($controls);
+$controls          = json_encode($controls);
 $arPlacemarkStyles = ($cfg->pointSettings->catPoints) ? json_encode($cfg->pointSettings->catPoints) : '{}';
-$mapSelector = 'ymaps-map-container';
+$mapSelector       = 'ymaps-map-container';
 
 $onload_scripts[] = <<<HTML
 	var mapConfig = {

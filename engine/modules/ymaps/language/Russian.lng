@@ -58,6 +58,7 @@ $module_lang = [
     'pointersCatDefault'                   => 'Иконка по умолчанию: ',
     'catIdWrong'                           => 'Категория не существует',
     'moduleActionApply'                    => 'Применить',
+    'moduleActionReset'                    => 'Сбросить',
     'markerCustomColor'                    => ' (свой цвет)',
     'moduleActionChange'                   => 'Изменить',
     'moduleActionAdd'                      => 'Добавить',

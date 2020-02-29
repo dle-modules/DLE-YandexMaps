@@ -43,12 +43,11 @@ doc
 
 var loadController = function () {
   // eslint-disable-next-line camelcase
-  var dleRoot = window.dle_root || '';
+  var dleRoot = window.dle_root || '/';
   $.ajax({
     url: dleRoot + 'engine/ajax/controller.php',
     data: {
-      mod: 'ymaps',
-      type: 'editnews'
+      mod: 'ymaps_editnews'
     }
   })
     .done(function(data) {
