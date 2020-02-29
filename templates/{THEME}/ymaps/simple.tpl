@@ -21,7 +21,7 @@
 		}),
 		placemark = new ymaps.Placemark([lat, lon], {
 			balloonContentBody: balloonContentBodyText,
-			iconContent: iconContentText, // Раскомментировать  при необходимости
+			iconContent: iconContentText,
 			hintContent: hintContentText
 		},
 		placemarkStyle
