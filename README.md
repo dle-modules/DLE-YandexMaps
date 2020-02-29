@@ -17,6 +17,7 @@
 ## Настройка модуля
 http://maps.pafnuty.name/documentation/#setup
 
-## [Документация](http://maps.pafnuty.name)
+## Документация
+http://maps.pafnuty.name
 
 
